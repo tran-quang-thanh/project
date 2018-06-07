@@ -5,7 +5,7 @@ import time
 lower = np.array([0, 0, 0])
 higher = np.array([255, 255, 117])
 
-
+x = []
 def Scan(a, m, n):
     time = Time()
     count = 0
@@ -14,11 +14,14 @@ def Scan(a, m, n):
             if a[i, j] >= 200:
                 count += 1
     if count >= 64 * 64 * 1/2:
-        # time.Time()
-        # if time.Check():
-            return True
+        time.Time()
+        if time.Check() and not x[-1] == True and not x[-2] == True:
+            # return True
+            x.append(True)
+        else:
+            x.append(False)
     else:
-        return False
+        x.append(False)
 
 class Time():
     def Time(self):
@@ -26,16 +29,16 @@ class Time():
         while True:
             self.elapsed = time.clock() - self.start_time
             # print(self.elapsed)
-            if self.elapsed >= 0.09:
+            if self.elapsed >= 0.02:
                 # print(self.elapsed)
                 self.start_time = time.clock()
                 return False
-    #
-    # def Check(self):
-    #     if self.elapsed >= 0.004:
-    #         return True
-    #     else:
-    #         return False
+
+    def Check(self):
+        if self.elapsed >= 0.02:
+            return True
+        else:
+            return False
 
 cap = cv2.VideoCapture(0)
 a = Time()
@@ -46,10 +49,11 @@ while True:
     binImage = cv2.inRange(hsvImage, lower, higher)
     # print(Scan(binImage, 10, 10))
     cv2.imshow("binImg", binImage)
-    cv2.waitKey(100)
+    cv2.waitKey(40)
     # a.Time()
-    print(Scan(binImage, 10, 10))
-
+    # print(Scan(binImage, 10, 10))
+    Scan(binImage, 10, 10)
+    print(x[-1])
 
 
 
